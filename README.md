@@ -1,7 +1,7 @@
 ## Olá! Eu sou o Vinícius Konageski
 
 - 🔭 Em busca da primeira oportunidade como Desenvolvedor
-- 🌱 Estudando Python - HTML - CSS - JavaScript
+- 🌱 Estudando Python - Java
 - 📫 Contate-me no email: vinicius_konageski@hotmail.com
 
 <div align="center">
