@@ -1,7 +1,7 @@
 ## Olá! Eu sou o Vinícius Konageski
 
 - 🔭 Em busca da primeira oportunidade como Desenvolvedor
-- 🌱 Estudando Python - Java
+- 🌱 Estudando Python - Power BI - Analise de Dados
 - 📫 Contate-me no email: vinicius_konageski@hotmail.com
 
 <div align="center">
