@@ -18,7 +18,11 @@
   <img align="center" alt="Vini-PowerBI" height="30" width="40" src="https://upload.wikimedia.org/wikipedia/commons/c/cf/New_Power_BI_Logo.svg">
 </div>
     
-  ##
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/vlkonageski/vlkonageski/output/github-contribution-grid-snake-dark.svg">
+  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/vlkonageski/vlkonageski/output/github-contribution-grid-snake.svg">
+  <img alt="GitHub Contribution Snake" src="https://raw.githubusercontent.com/vlkonageski/vlkonageski/output/github-contribution-grid-snake.svg">
+</picture>
  
 <div> 
   <a href="https://www.linkedin.com/in/vin%C3%ADcius-konageski-ba865a106/" target="_blank"><img src="https://img.shields.io/badge/-LinkedIn-%230077B5?style=for-the-badge&logo=linkedin&logoColor=white" target="_blank"></a> 
