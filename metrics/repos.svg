@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="260" height="100" viewBox="0 0 260 100">
+<style>
+.t { font: 600 16px -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif; fill: #58a6ff; }
+.n { font: 700 44px -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif; fill: #58a6ff; }
+.s { font: 400 14px -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif; fill: #8b949e; }
+</style>
+<text x="0" y="22" class="t">Repositórios</text>
+<text x="0" y="76" class="n">26</text>
+<text x="64" y="76" class="s">projetos no GitHub</text>
+</svg>
