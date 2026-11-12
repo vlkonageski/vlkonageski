@@ -7,7 +7,6 @@
 <div align="center">
 <a href="https://github.com/vlkonageski">
   <img src="metrics/languages.svg"/>
-  <img src="metrics/repos.svg"/>
 </a>
 </div>
   <div style="display: inline_block"><br>
