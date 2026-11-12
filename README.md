@@ -6,8 +6,8 @@
 
 <div align="center">
  <a href="https://github.com/vlkonageski">
-  <img height="180" src="https://SEU-PROJETO.vercel.app/api?username=vlkonageski&show_icons=true&theme=dark&include_all_commits=true&count_private=true"/>
-  <img height="180" src="https://SEU-PROJETO.vercel.app/api/top-langs/?username=vlkonageski&layout=compact&langs_count=7&theme=dark"/>
+  <img src="metrics/stats.svg"/>
+  <img src="metrics/languages.svg"/>
 </a>
 </div>
   <div style="display: inline_block"><br>
