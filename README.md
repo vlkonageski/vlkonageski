@@ -6,7 +6,9 @@
 
 <div align="center">
 <a href="https://github.com/vlkonageski">
-  <img src="metrics/languages.svg" height="210"/>
+  <p align="left">
+    <img src="metrics/languages.svg" height="210"/>
+  </p>
 </a>
 </div>
   <div style="display: inline_block"><br>
