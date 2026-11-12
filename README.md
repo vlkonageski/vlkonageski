@@ -5,9 +5,10 @@
 - 📫 Contate-me no email: vinicius_konageski@hotmail.com
 
 <div align="center">
-  <a href="https://github.com/vlkonageski">
-  <img height="180em" src="https://github-readme-stats.vercel.app/api?username=vlkonageski&show_icons=true&theme=dark&include_all_commits=true&count_private=true"/>
-  <img height="180em" src="https://github-readme-stats.vercel.app/api/top-langs/?username=vlkonageski&layout=compact&langs_count=7&theme=dark"/>
+ <a href="https://github.com/vlkonageski">
+  <img height="180" src="https://SEU-PROJETO.vercel.app/api?username=vlkonageski&show_icons=true&theme=dark&include_all_commits=true&count_private=true"/>
+  <img height="180" src="https://SEU-PROJETO.vercel.app/api/top-langs/?username=vlkonageski&layout=compact&langs_count=7&theme=dark"/>
+</a>
 </div>
   <div style="display: inline_block"><br>
   <img align="center" alt="Vini-Js" height="30" width="40" src="https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-plain.svg">
