@@ -15,33 +15,125 @@ permissions:
   contents: write
 
 jobs:
-  metrics:
+  cards:
     runs-on: ubuntu-latest
     steps:
-      # Card principal: cabeçalho, atividade, comunidade e repositórios
-      - name: Stats
-        uses: lowlighter/metrics@v3.34
-        with:
-          filename: metrics/stats.svg
-          token: ${{ secrets.METRICS_TOKEN }}
-          user: vlkonageski
-          template: classic
-          base: header, activity, community, repositories
-          config_timezone: America/Sao_Paulo
+      - uses: actions/checkout@v4
 
-      # Card de linguagens mais usadas (equivalente ao top-langs)
-      - name: Languages
-        uses: lowlighter/metrics@v3.34
-        with:
-          filename: metrics/languages.svg
-          token: ${{ secrets.METRICS_TOKEN }}
-          user: vlkonageski
-          template: classic
-          base: ""
-          config_timezone: America/Sao_Paulo
-          plugin_languages: yes
-          plugin_languages_limit: 7
-          plugin_languages_sections: most-used
+      # Gera metrics/languages.svg (rosca) e metrics/repos.svg
+      - name: Gerar cards
+        env:
+          GH_TOKEN: ${{ secrets.METRICS_TOKEN }}
+          # Linguagens para ignorar, separadas por vírgula (ex.: "TeX,Batchfile")
+          EXCLUDE_LANGS: ""
+        run: |
+          python3 - <<'PY'
+          import json, math, os, urllib.request
+
+          TOKEN = os.environ.get("GH_TOKEN", "")
+          EXCLUDE = {s.strip() for s in os.environ.get("EXCLUDE_LANGS", "").split(",") if s.strip()}
+          TOP = 6
+          FONT = "-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif"
+          COLORS = {
+              "Python": "#3572A5", "HTML": "#e34c26", "CSS": "#663399", "JavaScript": "#f1e05a",
+              "TypeScript": "#3178c6", "Java": "#b07219", "PowerShell": "#5391FE", "TeX": "#3D6117",
+              "Shell": "#89e051", "Jupyter Notebook": "#DA5B0B", "Dockerfile": "#384d54",
+              "C#": "#178600", "TSQL": "#e38c00", "PLpgSQL": "#336790", "Vue": "#41b883",
+              "Batchfile": "#C1F12E", "Mako": "#7e858d", "Jinja": "#a52a22",
+          }
+          FALLBACK = ["#8b949e", "#d2a8ff", "#ffa657", "#7ee787", "#ff7b72", "#79c0ff"]
+
+          def get(url):
+              req = urllib.request.Request(url, headers={
+                  "Authorization": f"Bearer {TOKEN}", "Accept": "application/vnd.github+json"})
+              with urllib.request.urlopen(req) as r:
+                  return json.load(r)
+
+          def fetch():
+              repos, page = [], 1
+              while True:
+                  batch = get(f"https://api.github.com/user/repos?affiliation=owner&per_page=100&page={page}")
+                  if not batch:
+                      break
+                  repos += batch
+                  page += 1
+              langs = {}
+              for r in repos:
+                  if r["fork"]:
+                      continue
+                  for name, size in get(r["languages_url"]).items():
+                      if name not in EXCLUDE:
+                          langs[name] = langs.get(name, 0) + size
+              return len(repos), langs
+
+          def donut(langs):
+              total = sum(langs.values()) or 1
+              items = sorted(langs.items(), key=lambda x: -x[1])
+              if len(items) > TOP:
+                  items = items[:TOP] + [("Outros", sum(v for _, v in items[TOP:]))]
+              r, sw, cx, cy = 62, 24, 90, 125
+              circ = 2 * math.pi * r
+              parts, legend, offset, fb = [], [], 0.0, 0
+              for i, (name, size) in enumerate(items):
+                  if name in COLORS:
+                      color = COLORS[name]
+                  else:
+                      color = FALLBACK[fb % len(FALLBACK)]; fb += 1
+                  frac = size / total
+                  seg = frac * circ
+                  parts.append(
+                      f'<circle cx="{cx}" cy="{cy}" r="{r}" fill="none" stroke="{color}" stroke-width="{sw}" '
+                      f'stroke-dasharray="{seg:.2f} {circ - seg:.2f}" stroke-dashoffset="{-offset:.2f}" '
+                      f'transform="rotate(-90 {cx} {cy})"/>')
+                  offset += seg
+                  y = 62 + i * 25
+                  legend.append(
+                      f'<circle cx="205" cy="{y - 5}" r="6" fill="{color}"/>'
+                      f'<text x="220" y="{y}" class="l">{name}</text>'
+                      f'<text x="400" y="{y}" class="p" text-anchor="end">{frac * 100:.1f}%</text>')
+              h = max(225, 62 + len(items) * 25)
+              return f'''<svg xmlns="http://www.w3.org/2000/svg" width="410" height="{h}" viewBox="0 0 410 {h}">
+          <style>
+          .t {{ font: 600 16px {FONT}; fill: #58a6ff; }}
+          .l {{ font: 400 14px {FONT}; fill: #8b949e; }}
+          .p {{ font: 600 14px {FONT}; fill: #8b949e; }}
+          .c {{ font: 700 26px {FONT}; fill: #58a6ff; }}
+          .cs {{ font: 400 12px {FONT}; fill: #8b949e; }}
+          </style>
+          <text x="0" y="22" class="t">Linguagens mais usadas</text>
+          {"".join(parts)}
+          <text x="{cx}" y="{cy + 4}" class="c" text-anchor="middle">{len(langs)}</text>
+          <text x="{cx}" y="{cy + 22}" class="cs" text-anchor="middle">linguagens</text>
+          {"".join(legend)}
+          </svg>
+          '''
+
+          def repos_card(n):
+              return f'''<svg xmlns="http://www.w3.org/2000/svg" width="260" height="100" viewBox="0 0 260 100">
+          <style>
+          .t {{ font: 600 16px {FONT}; fill: #58a6ff; }}
+          .n {{ font: 700 44px {FONT}; fill: #58a6ff; }}
+          .s {{ font: 400 14px {FONT}; fill: #8b949e; }}
+          </style>
+          <text x="0" y="22" class="t">Repositórios</text>
+          <text x="0" y="76" class="n">{n}</text>
+          <text x="{len(str(n)) * 27 + 10}" y="76" class="s">projetos no GitHub</text>
+          </svg>
+          '''
+
+          n, langs = fetch()
+          os.makedirs("metrics", exist_ok=True)
+          open("metrics/languages.svg", "w", encoding="utf-8").write(donut(langs))
+          open("metrics/repos.svg", "w", encoding="utf-8").write(repos_card(n))
+          print(f"{n} repositórios, {len(langs)} linguagens")
+          PY
+
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add metrics/
+          git diff --staged --quiet || (git commit -m "Atualiza cards do perfil" && git push)
 
   # Cobrinha comendo o gráfico de contribuições
   snake:
